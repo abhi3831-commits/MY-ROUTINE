@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Routine">
+<title>My Routine</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fdf6f0;
+  --surface:#fff8f4;
+  --surface2:#fceee6;
+  --border:rgba(180,100,100,0.12);
+  --text:#2d1f1f;
+  --muted:#a07070;
+  --accent:#e8607a;
+  --accent-dim:rgba(232,96,122,0.1);
+  --accent-text:#fff;
+  --gold:#c9843a;
+  --gold-dim:rgba(201,132,58,0.1);
+  --green:#5a9e6f;
+  --green-dim:rgba(90,158,111,0.1);
+  --blue:#5a7fbf;
+  --blue-dim:rgba(90,127,191,0.1);
+  --lavender:#9b7ec8;
+  --lavender-dim:rgba(155,126,200,0.1);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bot:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;overscroll-behavior:none}
+body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height:100vh}
+
+.topbar{
+  padding:calc(var(--safe-top) + 16px) 20px 14px;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:flex-end;
+}
+.topbar-left{}
+.topbar-greeting{font-size:12px;color:var(--muted);margin-bottom:2px}
+.topbar-title{font-family:'DM Serif Display',serif;font-size:26px;letter-spacing:-0.5px;color:var(--text)}
+.topbar-date{font-size:12px;color:var(--muted);text-align:right;line-height:1.6}
+
+.tabs{display:flex;padding:0 4px;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;scrollbar-width:none;gap:0}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:11px 13px;font-size:12px;font-weight:500;color:var(--muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+.pages{flex:1;overflow:hidden}
+.page{display:none;overflow-y:auto;padding-bottom:calc(var(--safe-bot) + 80px)}
+.page.active{display:block}
+
+.section-head{font-size:10px;font-weight:500;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;padding:20px 20px 8px}
+
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 20px 4px}
+.stat{background:var(--surface);border-radius:14px;padding:14px 16px;border:1px solid var(--border)}
+.stat-label{font-size:11px;color:var(--muted);margin-bottom:4px}
+.stat-val{font-size:26px;font-weight:300;color:var(--text);letter-spacing:-1px}
+.stat-val span{font-size:13px;color:var(--muted);font-weight:400;letter-spacing:0}
+
+.prog-wrap{padding:4px 20px 0}
+.prog-bar{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;margin-bottom:5px}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s cubic-bezier(0.4,0,0.2,1)}
+.prog-label{font-size:11px;color:var(--muted)}
+
+.habit{display:flex;align-items:center;gap:14px;padding:13px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s;background:transparent}
+.habit:active{background:var(--surface2)}
+.habit.done .habit-name{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(160,112,112,0.4)}
+.checkring{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;background:var(--surface)}
+.habit.done .checkring{background:var(--accent);border-color:var(--accent)}
+.checkring svg{display:none;width:13px;height:13px}
+.habit.done .checkring svg{display:block}
+.habit-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.habit-info{flex:1}
+.habit-name{font-size:14px;font-weight:400;color:var(--text);transition:color 0.2s}
+.habit-time{font-size:11px;color:var(--muted);margin-top:2px}
+.habit-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;margin-left:auto;flex-shrink:0}
+
+.dots-wrap{padding:16px 20px 0}
+.dots-label{font-size:11px;color:var(--muted);margin-bottom:10px}
+.dots-row{display:flex;gap:7px}
+.dot{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);background:var(--surface)}
+.dot.full{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.dot.partial{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
+
+.reset-btn{margin:20px 20px 0;padding:10px 18px;border-radius:10px;border:1px solid var(--border);font-size:13px;color:var(--muted);background:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+.reset-btn:active{background:var(--surface2)}
+
+.mood-wrap{padding:12px 20px 0;display:flex;gap:8px;flex-wrap:wrap}
+.mood-btn{padding:7px 15px;border-radius:20px;border:1px solid var(--border);font-size:13px;color:var(--muted);background:var(--surface);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.mood-btn.sel{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+
+.j-block{padding:14px 20px 0}
+.j-label{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px}
+.j-hint{font-size:11px;color:var(--muted);margin-bottom:8px}
+textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;resize:none;min-height:80px}
+textarea:focus{outline:none;border-color:rgba(232,96,122,0.4)}
+textarea::placeholder{color:var(--muted);opacity:0.5}
+
+.save-row{padding:18px 20px 0;display:flex;align-items:center;gap:12px}
+.save-btn{padding:10px 24px;border-radius:10px;background:var(--accent);border:none;font-size:13px;font-weight:500;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif}
+.save-btn:active{opacity:0.85}
+.saved-msg{font-size:12px;color:var(--accent);opacity:0;transition:opacity 0.3s}
+
+.entry-card{margin:0 20px 12px;background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:16px;overflow:hidden}
+.entry-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.entry-date-str{font-size:12px;color:var(--muted)}
+.entry-right{display:flex;gap:8px;align-items:center}
+.mood-pill{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--accent-dim);color:var(--accent)}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:2px}
+.entry-section{margin-bottom:10px}
+.entry-section-label{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.entry-text{font-size:13px;color:var(--text);line-height:1.6;white-space:pre-wrap;opacity:0.85}
+.entry-bar{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.entry-bar-fill{flex:1;height:3px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.entry-bar-pct{height:100%;background:var(--accent);border-radius:2px}
+.empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px;line-height:1.8}
+
+/* Market Analysis Tab */
+.market-hero{margin:16px 20px 0;background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px}
+.market-hero-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.market-hero-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
+.market-date-nav{display:flex;align-items:center;gap:10px}
+.nav-btn{background:none;border:1px solid var(--border);border-radius:8px;width:28px;height:28px;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}
+.nav-btn:active{background:var(--surface2)}
+.nav-date{font-size:12px;color:var(--text);font-weight:500;min-width:80px;text-align:center}
+
+.mfield{padding:12px 20px 0}
+.mfield-label{font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.mfield-dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.mfield textarea{min-height:70px}
+
+.pnl-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 20px 0}
+.pnl-card{background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:12px 14px}
+.pnl-label{font-size:11px;color:var(--muted);margin-bottom:4px}
+.pnl-input{width:100%;background:transparent;border:none;font-size:20px;font-weight:300;color:var(--text);font-family:'DM Sans',sans-serif;letter-spacing:-0.5px}
+.pnl-input:focus{outline:none}
+.pnl-input.profit{color:var(--green)}
+.pnl-input.loss{color:var(--accent)}
+
+.trade-list{padding:0 20px}
+.trade-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.trade-sym{font-size:13px;font-weight:500;color:var(--text);min-width:60px}
+.trade-dir{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.trade-dir.buy{background:var(--green-dim);color:var(--green)}
+.trade-dir.sell{background:var(--accent-dim);color:var(--accent)}
+.trade-note{font-size:12px;color:var(--muted);flex:1}
+.trade-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:4px}
+
+.add-trade-row{padding:10px 20px 0;display:flex;gap:8px;flex-wrap:wrap}
+.add-trade-row input{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif}
+.add-trade-row input:focus{outline:none;border-color:rgba(232,96,122,0.4)}
+.sym-input{width:80px}
+.note-input{flex:1;min-width:100px}
+.dir-sel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 10px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;cursor:pointer}
+.add-trade-btn{padding:8px 16px;border-radius:10px;background:var(--accent);border:none;font-size:13px;font-weight:500;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+.msave-row{padding:16px 20px 0;display:flex;align-items:center;gap:12px}
+
+/* Book Summary Tab */
+.book-hero{margin:16px 20px 0;background:linear-gradient(135deg,var(--lavender-dim),var(--accent-dim));border-radius:16px;border:1px solid rgba(155,126,200,0.2);padding:18px}
+.book-hero-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);margin-bottom:4px}
+.book-hero-sub{font-size:12px;color:var(--muted)}
+.book-streak{display:inline-block;margin-top:10px;font-size:12px;padding:4px 12px;border-radius:20px;background:rgba(155,126,200,0.15);color:var(--lavender);border:1px solid rgba(155,126,200,0.2)}
+
+.book-form{padding:0 20px}
+.bfield{margin-top:14px}
+.bfield-label{font-size:12px;font-weight:500;color:var(--text);margin-bottom:5px}
+.bfield input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif}
+.bfield input:focus{outline:none;border-color:rgba(155,126,200,0.5)}
+.bfield input::placeholder{color:var(--muted);opacity:0.5}
+.rating-row{display:flex;gap:8px;margin-top:6px}
+.star-btn{background:none;border:none;font-size:24px;cursor:pointer;opacity:0.3;transition:opacity 0.15s;padding:2px}
+.star-btn.on{opacity:1}
+
+.book-history{padding:0 20px;margin-top:4px}
+.book-card{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:14px;margin-bottom:10px}
+.book-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.book-title-text{font-size:14px;font-weight:500;color:var(--text)}
+.book-author-text{font-size:12px;color:var(--muted);margin-top:2px}
+.book-stars{font-size:14px}
+.book-summary-text{font-size:13px;color:var(--text);opacity:0.8;line-height:1.6;white-space:pre-wrap}
+.book-lesson{margin-top:8px;padding:8px 10px;background:var(--lavender-dim);border-radius:8px;border-left:2px solid var(--lavender);font-size:12px;color:var(--text);line-height:1.5}
+.book-meta{font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-greeting" id="greeting">Good morning</div>
+    <div class="topbar-title">My Routine</div>
+  </div>
+  <div class="topbar-date" id="topbar-date"></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('tracker')">Tracker</button>
+  <button class="tab" onclick="showTab('journal')">Journal</button>
+  <button class="tab" onclick="showTab('market')">Market</button>
+  <button class="tab" onclick="showTab('books')">Books</button>
+  <button class="tab" onclick="showTab('history')">History</button>
+</div>
+
+<div class="pages">
+
+<!-- TRACKER -->
+<div id="page-tracker" class="page active">
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-label">Done today</div><div class="stat-val" id="done-count">0 <span>/ 10</span></div></div>
+    <div class="stat"><div class="stat-label">Completion</div><div class="stat-val" id="pct">0<span>%</span></div></div>
+    <div class="stat"><div class="stat-label">Streak</div><div class="stat-val" id="streak">0 <span>days</span></div></div>
+    <div class="stat"><div class="stat-label">Best streak</div><div class="stat-val" id="best">0 <span>days</span></div></div>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="bar" style="width:0%"></div></div>
+    <div class="prog-label" id="prog-label">0 of 10 habits completed</div>
+  </div>
+
+  <div class="section-head">Morning</div>
+  <div class="habit" data-id="walk" onclick="toggle(this)">
+    <div class="checkring"><svg viewBox="0 0 13 13" fill="none"><polyline points="1.5,6.5 5,10 11,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="habit-info"><div class="habit-name">Walk · 10k steps</div><div class="habit-time">4:30 – 7:30 AM</div></div>
+    <span class="habit-badge" style="background:var(--gold-dim);color:var(--gold)">Morning</span>
+  </div>
+  <div class="habit" data-id="prayer" onclick="toggle(this)">
+    <div class="checkring"><svg viewBox="0 0 13 13" fill="none"><polyline points="1.5,6.5 5,10 11,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="habit-info"><div class="habit-name">Prayer</div><div class="habit-time">7:30 – 9:15 AM</div></div>
+    <span class="habit-badge" style="background:var(--lavender-dim);color:var(--lavender)">Soul</span>
+  </div>
+  <div class="habit" data-id="bath" onclick="toggle(this)">
+    <div class="checkring"><svg viewBox="0 0 13 13" fill="none"><polyline points="1.5,6.5 5,10 11,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="habit-info"><div class="habit-name">Bath</div><div class="habit-time">7:30 – 9:15 AM</div></div>
+    <span class="habit-badge" style="background:var(--blue-dim);color:var(--blue)">Fresh</span>
+  </div>
+  <div class="habit" data-id="meditation" onclick="toggle(this)">
+    <div class="checkring"><svg viewBox="0 0 13 13" fill="none"><polyline points="1.5,6.5 5,10 11,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="habit-info"><div class="habit-name">Meditation</div><div class="habit-time">7:30 – 9:15 AM</div></div>
+    <span class="habit-badge" style="background:var(--lavender-dim);color:var(--lavender)">Mind</span>
+  </div>
+
+  <div class="section-head">Work</div>
+  <div class="habit" data-id="market" onclick="toggle(this)">
+    <div class="checkring"><svg viewBox="0 0 13 13" fill="none"><polyline points="1.5,6.5 5,10 11,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="habit-info"><div class="habit-name">Market hours</div><div class="habit-time">9:15 AM – 3:30 PM</div></div>
+    <span class="habit-badge" style="background:var(--green-dim);color:var(--green)">Focus</span>
+  </div>
+  <div class="habit" data-id="analysis" onclick="toggle(this)">
+    <div class="checkring"><svg viewBox="0 0 13 13" fill="none"><polyline points="1.5,6.5 5,10 11,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="habit-info"><div class="habit-name">Market analysis</div><div class="habit-time">3:30 – 3:45 PM</div></div>
+    <span class="habit-badge" style="background:var(--green-dim);color:var(--green)">Review</span>
+  </div>
+
+  <div class="section-head">Evening</div>
+  <div class="habit" data-id="nap" onclick="toggle(this)">
+    <div class="checkring"><svg viewBox="0 0 13 13" fill="none"><polyline points="1.5,6.5 5,10 11,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="habit-info"><div class="habit-name">Nap</div><div class="habit-time">3:45 – 4:45 PM</div></div>
+    <span class="habit-badge" style="background:var(--blue-dim);color:var(--blue)">Rest</span>
+  </div>
+  <div class="habit" data-id="gym" onclick="toggle(this)">
+    <div class="checkring"><svg viewBox="0 0 13 13" fill="none"><polyline points="1.5,6.5 5,10 11,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="habit-info"><div class="habit-name">Gym</div><div class="habit-time">5:00 – 6:30 PM</div></div>
+    <span class="habit-badge" style="background:var(--accent-dim);color:var(--accent)">Body</span>
+  </div>
+  <div class="habit" data-id="ghumu" onclick="toggle(this)">
+    <div class="checkring"><svg viewBox="0 0 13 13" fill="none"><polyline points="1.5,6.5 5,10 11,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="habit-info"><div class="habit-name">Ghumu ghumu time</div><div class="habit-time">7:00 – 8:30 PM</div></div>
+    <span class="habit-badge" style="background:var(--gold-dim);color:var(--gold)">Free</span>
+  </div>
+  <div class="habit" data-id="book" onclick="toggle(this)">
+    <div class="checkring"><svg viewBox="0 0 13 13" fill="none"><polyline points="1.5,6.5 5,10 11,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="habit-info"><div class="habit-name">Read book summary</div><div class="habit-time">Anytime</div></div>
+    <span class="habit-badge" style="background:var(--lavender-dim);color:var(--lavender)">Learn</span>
+  </div>
+
+  <div class="dots-wrap">
+    <div class="dots-label">Last 7 days</div>
+    <div class="dots-row" id="dots"></div>
+  </div>
+  <button class="reset-btn" onclick="resetDay()">↺ Reset today</button>
+</div>
+
+<!-- JOURNAL -->
+<div id="page-journal" class="page">
+  <div class="section-head" style="padding-top:16px">How are you feeling?</div>
+  <div class="mood-wrap" id="mood-wrap">
+    <button class="mood-btn" data-mood="Great" onclick="selMood(this)">Great</button>
+    <button class="mood-btn" data-mood="Good" onclick="selMood(this)">Good</button>
+    <button class="mood-btn" data-mood="Okay" onclick="selMood(this)">Okay</button>
+    <button class="mood-btn" data-mood="Tired" onclick="selMood(this)">Tired</button>
+    <button class="mood-btn" data-mood="Off" onclick="selMood(this)">Off</button>
+  </div>
+  <div class="j-block">
+    <div class="j-label">Morning reflection</div>
+    <div class="j-hint">Walk, meditation, mindset for the day</div>
+    <textarea id="j-morning" rows="3" placeholder="Write here..."></textarea>
+  </div>
+  <div class="j-block">
+    <div class="j-label">Evening thoughts</div>
+    <div class="j-hint">How was the day? Gratitude, tomorrow's intention</div>
+    <textarea id="j-evening" rows="3" placeholder="Write here..."></textarea>
+  </div>
+  <div class="save-row">
+    <button class="save-btn" onclick="saveJournal()">Save entry</button>
+    <span class="saved-msg" id="j-saved">✓ Saved</span>
+  </div>
+</div>
+
+<!-- MARKET ANALYSIS -->
+<div id="page-market" class="page">
+  <div class="market-hero">
+    <div class="market-hero-top">
+      <div class="market-hero-label">Daily market log</div>
+      <div class="market-date-nav">
+        <button class="nav-btn" onclick="mNav(-1)">‹</button>
+        <div class="nav-date" id="m-nav-date"></div>
+        <button class="nav-btn" onclick="mNav(1)">›</button>
+      </div>
+    </div>
+    <div class="pnl-row" style="padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="pnl-card">
+        <div class="pnl-label">P&L (₹)</div>
+        <input class="pnl-input" id="m-pnl" type="number" placeholder="0" oninput="colorPnl(this);autoSaveMarket()">
+      </div>
+      <div class="pnl-card">
+        <div class="pnl-label">Capital used (₹)</div>
+        <input class="pnl-input" id="m-capital" type="number" placeholder="0" oninput="autoSaveMarket()">
+      </div>
+    </div>
+  </div>
+
+  <div class="mfield">
+    <div class="mfield-label"><span class="mfield-dot" style="background:var(--green)"></span>What worked today</div>
+    <textarea id="m-worked" rows="2" placeholder="Good trades, good decisions..."></textarea>
+  </div>
+  <div class="mfield">
+    <div class="mfield-label"><span class="mfield-dot" style="background:var(--accent)"></span>What went wrong</div>
+    <textarea id="m-wrong" rows="2" placeholder="Mistakes, impulse trades..."></textarea>
+  </div>
+  <div class="mfield">
+    <div class="mfield-label"><span class="mfield-dot" style="background:var(--blue)"></span>Market observation</div>
+    <textarea id="m-obs" rows="2" placeholder="Trend, sectors, news impact..."></textarea>
+  </div>
+  <div class="mfield">
+    <div class="mfield-label"><span class="mfield-dot" style="background:var(--gold)"></span>Tomorrow's plan</div>
+    <textarea id="m-plan" rows="2" placeholder="Watchlist, levels to watch..."></textarea>
+  </div>
+
+  <div class="section-head">Trades log</div>
+  <div class="add-trade-row">
+    <input class="sym-input" id="t-sym" placeholder="Symbol" maxlength="10">
+    <select class="dir-sel" id="t-dir"><option value="buy">BUY</option><option value="sell">SELL</option></select>
+    <input class="note-input" id="t-note" placeholder="Note (optional)">
+    <button class="add-trade-btn" onclick="addTrade()">+ Add</button>
+  </div>
+  <div class="trade-list" id="trade-list" style="margin-top:8px"></div>
+
+  <div class="msave-row">
+    <button class="save-btn" onclick="saveMarket()">Save analysis</button>
+    <span class="saved-msg" id="m-saved">✓ Saved</span>
+  </div>
+</div>
+
+<!-- BOOKS -->
+<div id="page-books" class="page">
+  <div class="book-hero">
+    <div class="book-hero-title">Book Summaries</div>
+    <div class="book-hero-sub">One summary a day keeps ignorance away</div>
+    <div class="book-streak" id="book-streak-badge">0 day streak</div>
+  </div>
+
+  <div class="book-form">
+    <div class="bfield">
+      <div class="bfield-label">Book title</div>
+      <input id="b-title" placeholder="e.g. Atomic Habits">
+    </div>
+    <div class="bfield">
+      <div class="bfield-label">Author</div>
+      <input id="b-author" placeholder="e.g. James Clear">
+    </div>
+    <div class="bfield">
+      <div class="bfield-label">Summary / Key ideas</div>
+      <textarea id="b-summary" rows="4" placeholder="Write what you learned today..."></textarea>
+    </div>
+    <div class="bfield">
+      <div class="bfield-label">One lesson to apply</div>
+      <textarea id="b-lesson" rows="2" placeholder="What will you do differently?"></textarea>
+    </div>
+    <div class="bfield">
+      <div class="bfield-label">Rating</div>
+      <div class="rating-row" id="rating-row">
+        <button class="star-btn" data-r="1" onclick="setRating(1)">★</button>
+        <button class="star-btn" data-r="2" onclick="setRating(2)">★</button>
+        <button class="star-btn" data-r="3" onclick="setRating(3)">★</button>
+        <button class="star-btn" data-r="4" onclick="setRating(4)">★</button>
+        <button class="star-btn" data-r="5" onclick="setRating(5)">★</button>
+      </div>
+    </div>
+  </div>
+  <div class="save-row">
+    <button class="save-btn" onclick="saveBook()">Save summary</button>
+    <span class="saved-msg" id="b-saved">✓ Saved</span>
+  </div>
+
+  <div class="section-head">All summaries</div>
+  <div class="book-history" id="book-history"></div>
+</div>
+
+<!-- HISTORY -->
+<div id="page-history" class="page">
+  <div style="padding-top:6px" id="history-list"></div>
+</div>
+
+</div>
+
+<script>
+const TOTAL=10;
+const WDAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function fmtDate(d){return WDAYS[d.getDay()]+', '+d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear()}
+function fmtShort(d){return d.getDate()+' '+MONTHS[d.getMonth()]}
+
+const now=new Date();
+document.getElementById('topbar-date').innerHTML=WDAYS[now.getDay()]+', '+now.getDate()+' '+MONTHS[now.getMonth()]+'<br>'+now.getFullYear();
+const hr=now.getHours();
+document.getElementById('greeting').textContent=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+
+const TODAY=now.toDateString();
+
+function getS(){try{return JSON.parse(localStorage.getItem('myr_v3')||'{}')}catch(e){return {}}}
+function saveS(s){try{localStorage.setItem('myr_v3',JSON.stringify(s))}catch(e){}}
+
+let S=getS();
+if(!S.days)S.days={};
+if(!S.days[TODAY])S.days[TODAY]=[];
+if(!S.bestStreak)S.bestStreak=0;
+if(!S.journal)S.journal={};
+if(!S.journal[TODAY])S.journal[TODAY]={mood:'',morning:'',evening:''};
+if(!S.market)S.market={};
+if(!S.books)S.books=[];
+if(!S.bookRating)S.bookRating=0;
+
+let mNavDate=new Date();
+
+function showTab(t){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['tracker','journal','market','books','history'][i]===t));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+t).classList.add('active');
+  if(t==='history')renderHistory();
+  if(t==='books')renderBooks();
+  if(t==='market')loadMarket();
+}
+
+function toggle(el){
+  const id=el.dataset.id;
+  const day=S.days[TODAY];
+  const idx=day.indexOf(id);
+  if(idx>-1)day.splice(idx,1);else day.push(id);
+  el.classList.toggle('done',day.includes(id));
+  saveS(S);updateStats();
+}
+
+function updateStats(){
+  const done=S.days[TODAY].length;
+  const pct=Math.round(done/TOTAL*100);
+  document.getElementById('done-count').innerHTML=done+' <span>/ '+TOTAL+'</span>';
+  document.getElementById('pct').innerHTML=pct+'<span>%</span>';
+  document.getElementById('bar').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=done+' of '+TOTAL+' habits completed';
+  const str=calcStreak();
+  const best=Math.max(str,S.bestStreak);
+  S.bestStreak=best;saveS(S);
+  document.getElementById('streak').innerHTML=str+' <span>day'+(str===1?'':'s')+'</span>';
+  document.getElementById('best').innerHTML=best+' <span>day'+(best===1?'':'s')+'</span>';
+  renderDots();
+}
+
+function calcStreak(){
+  let s=0,d=new Date();
+  for(let i=0;i<365;i++){
+    const k=d.toDateString();
+    const c=(S.days[k]||[]).length;
+    if(c===TOTAL){s++;d.setDate(d.getDate()-1);}
+    else if(k===TODAY)break;
+    else break;
+  }
+  return s;
+}
+
+function renderDots(){
+  const cont=document.getElementById('dots');cont.innerHTML='';
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const k=d.toDateString();const c=(S.days[k]||[]).length;
+    const dot=document.createElement('div');
+    dot.className='dot'+(c===TOTAL?' full':c>0?' partial':'');
+    dot.textContent=WDAYS[d.getDay()].charAt(0);
+    dot.title=k+': '+c+'/'+TOTAL;
+    cont.appendChild(dot);
+  }
+}
+
+function resetDay(){
+  S.days[TODAY]=[];saveS(S);
+  document.querySelectorAll('.habit').forEach(h=>h.classList.remove('done'));
+  updateStats();
+}
+
+function selMood(btn){
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  S.journal[TODAY].mood=btn.dataset.mood;saveS(S);
+}
+
+function saveJournal(){
+  S.journal[TODAY].morning=document.getElementById('j-morning').value;
+  S.journal[TODAY].evening=document.getElementById('j-evening').value;
+  saveS(S);flash('j-saved');
+}
+
+function flash(id){
+  const el=document.getElementById(id);
+  el.style.opacity='1';setTimeout(()=>el.style.opacity='0',2000);
+}
+
+function mNavKey(d){return d.toDateString()}
+function loadMarket(){
+  const k=mNavKey(mNavDate);
+  document.getElementById('m-nav-date').textContent=fmtShort(mNavDate);
+  const m=S.market[k]||{};
+  document.getElementById('m-pnl').value=m.pnl||'';
+  document.getElementById('m-capital').value=m.capital||'';
+  document.getElementById('m-worked').value=m.worked||'';
+  document.getElementById('m-wrong').value=m.wrong||'';
+  document.getElementById('m-obs').value=m.obs||'';
+  document.getElementById('m-plan').value=m.plan||'';
+  colorPnl(document.getElementById('m-pnl'));
+  renderTrades(m.trades||[]);
+}
+
+function mNav(dir){
+  mNavDate.setDate(mNavDate.getDate()+dir);
+  loadMarket();
+}
+
+function colorPnl(el){
+  const v=parseFloat(el.value);
+  el.className='pnl-input'+(v>0?' profit':v<0?' loss':'');
+}
+
+function getMarketData(){
+  const k=mNavKey(mNavDate);
+  if(!S.market[k])S.market[k]={trades:[]};
+  return S.market[k];
+}
+
+function autoSaveMarket(){
+  const m=getMarketData();
+  m.pnl=document.getElementById('m-pnl').value;
+  m.capital=document.getElementById('m-capital').value;
+  saveS(S);
+}
+
+function saveMarket(){
+  const m=getMarketData();
+  m.pnl=document.getElementById('m-pnl').value;
+  m.capital=document.getElementById('m-capital').value;
+  m.worked=document.getElementById('m-worked').value;
+  m.wrong=document.getElementById('m-wrong').value;
+  m.obs=document.getElementById('m-obs').value;
+  m.plan=document.getElementById('m-plan').value;
+  saveS(S);flash('m-saved');
+}
+
+function addTrade(){
+  const sym=document.getElementById('t-sym').value.trim().toUpperCase();
+  if(!sym)return;
+  const dir=document.getElementById('t-dir').value;
+  const note=document.getElementById('t-note').value.trim();
+  const m=getMarketData();
+  if(!m.trades)m.trades=[];
+  m.trades.push({sym,dir,note,time:new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit'})});
+  saveS(S);
+  document.getElementById('t-sym').value='';
+  document.getElementById('t-note').value='';
+  renderTrades(m.trades);
+}
+
+function renderTrades(trades){
+  const list=document.getElementById('trade-list');
+  list.innerHTML='';
+  if(!trades||!trades.length){list.innerHTML='<div style="padding:10px 0;font-size:12px;color:var(--muted)">No trades logged yet</div>';return;}
+  trades.forEach((t,i)=>{
+    const row=document.createElement('div');row.className='trade-item';
+    row.innerHTML='<div class="trade-sym">'+t.sym+'</div>'
+      +'<span class="trade-dir '+t.dir+'">'+t.dir.toUpperCase()+'</span>'
+      +'<div class="trade-note">'+esc(t.note||'')+(t.time?' <span style="opacity:0.5">'+t.time+'</span>':'')+'</div>'
+      +'<button class="trade-del" onclick="delTrade('+i+')">✕</button>';
+    list.appendChild(row);
+  });
+}
+
+function delTrade(i){
+  const m=getMarketData();
+  m.trades.splice(i,1);saveS(S);renderTrades(m.trades);
+}
+
+let curRating=0;
+function setRating(r){
+  curRating=r;
+  document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('on',i<r));
+}
+
+function saveBook(){
+  const title=document.getElementById('b-title').value.trim();
+  if(!title)return;
+  const entry={
+    id:Date.now(),
+    date:TODAY,
+    title,
+    author:document.getElementById('b-author').value.trim(),
+    summary:document.getElementById('b-summary').value.trim(),
+    lesson:document.getElementById('b-lesson').value.trim(),
+    rating:curRating
+  };
+  S.books.unshift(entry);saveS(S);
+  document.getElementById('b-title').value='';
+  document.getElementById('b-author').value='';
+  document.getElementById('b-summary').value='';
+  document.getElementById('b-lesson').value='';
+  setRating(0);
+  flash('b-saved');renderBooks();
+}
+
+function renderBooks(){
+  const cont=document.getElementById('book-history');
+  if(!S.books||!S.books.length){cont.innerHTML='<div class="empty">No summaries yet.<br>Add your first one above.</div>';updateBookStreak();return;}
+  cont.innerHTML='';
+  S.books.forEach(b=>{
+    const card=document.createElement('div');card.className='book-card';
+    const stars='★'.repeat(b.rating||0)+'☆'.repeat(5-(b.rating||0));
+    card.innerHTML='<div class="book-card-header"><div><div class="book-title-text">'+esc(b.title)+'</div>'+(b.author?'<div class="book-author-text">'+esc(b.author)+'</div>':'')+'</div><div style="display:flex;align-items:center;gap:8px"><span class="book-stars" style="color:var(--gold)">'+stars+'</span><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px" onclick="delBook('+b.id+')">✕</button></div></div>'
+      +(b.summary?'<div class="book-summary-text">'+esc(b.summary)+'</div>':'')
+      +(b.lesson?'<div class="book-lesson">💡 '+esc(b.lesson)+'</div>':'')
+      +'<div class="book-meta">'+new Date(b.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})+'</div>';
+    cont.appendChild(card);
+  });
+  updateBookStreak();
+}
+
+function delBook(id){
+  S.books=S.books.filter(b=>b.id!==id);saveS(S);renderBooks();
+}
+
+function updateBookStreak(){
+  let s=0,d=new Date();
+  for(let i=0;i<365;i++){
+    const k=d.toDateString();
+    const has=S.books&&S.books.some(b=>b.date===k);
+    if(has){s++;d.setDate(d.getDate()-1);}
+    else if(k===TODAY)break;
+    else break;
+  }
+  document.getElementById('book-streak-badge').textContent=s+' day streak';
+}
+
+function renderHistory(){
+  const list=document.getElementById('history-list');
+  const keys=Object.keys(S.journal).sort((a,b)=>new Date(b)-new Date(a));
+  const valid=keys.filter(k=>{const j=S.journal[k];return j.morning||j.evening||j.mood;});
+  if(!valid.length){list.innerHTML='<div class="empty">No journal entries yet.</div>';return;}
+  list.innerHTML='';
+  valid.forEach(k=>{
+    const j=S.journal[k];
+    const done=(S.days[k]||[]).length;
+    const pct=Math.round(done/TOTAL*100);
+    const m=S.market[k];
+    const card=document.createElement('div');card.className='entry-card';
+    card.innerHTML='<div class="entry-header"><div class="entry-date-str">'+fmtDate(new Date(k))+'</div>'
+      +'<div class="entry-right">'+(j.mood?'<span class="mood-pill">'+j.mood+'</span>':'')
+      +'<button class="del-btn" onclick="delEntry(\''+k+'\')">✕</button></div></div>'
+      +(j.morning?'<div class="entry-section"><div class="entry-section-label">Morning</div><div class="entry-text">'+esc(j.morning)+'</div></div>':'')
+      +(j.evening?'<div class="entry-section"><div class="entry-section-label">Evening</div><div class="entry-text">'+esc(j.evening)+'</div></div>':'')
+      +(m&&m.pnl?'<div class="entry-section"><div class="entry-section-label">P&L</div><div class="entry-text" style="color:'+(parseFloat(m.pnl)>=0?'var(--green)':'var(--accent)')+'">₹'+m.pnl+'</div></div>':'')
+      +'<div class="entry-bar"><span>'+done+'/'+TOTAL+' habits</span><div class="entry-bar-fill"><div class="entry-bar-pct" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div>';
+    list.appendChild(card);
+  });
+}
+
+function delEntry(k){if(S.journal[k])delete S.journal[k];saveS(S);renderHistory();}
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+document.querySelectorAll('.habit').forEach(h=>{
+  if(S.days[TODAY].includes(h.dataset.id))h.classList.add('done');
+});
+const tj=S.journal[TODAY];
+document.getElementById('j-morning').value=tj.morning||'';
+document.getElementById('j-evening').value=tj.evening||'';
+if(tj.mood)document.querySelectorAll('.mood-btn').forEach(b=>{if(b.dataset.mood===tj.mood)b.classList.add('sel');});
+
+document.querySelectorAll('#page-market textarea,#page-market input').forEach(el=>{
+  el.addEventListener('input',()=>{});
+});
+
+loadMarket();
+updateStats();
+</script>
+</body>
+</html>
