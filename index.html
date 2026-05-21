@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sankalp">
 <title>Sankalp</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#fdf6f0;--surface:#fff8f4;--surface2:#fceee6;
@@ -21,29 +21,38 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;}
 body{max-width:430px;margin:0 auto;min-height:100vh}
+
 .topbar{padding:48px 20px 14px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
-.topbar-logo{height:48px;width:auto}
+.topbar-logo{height:44px;width:auto}
 .topbar-right{text-align:right}
 .topbar-greeting{font-size:11px;color:var(--muted)}
 .topbar-name{font-size:15px;color:var(--accent);font-weight:500}
 .topbar-date{font-size:11px;color:var(--muted);line-height:1.6;margin-top:2px}
-.tabs{display:flex;padding:0 4px;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;scrollbar-width:none}
+
+.quote-banner{margin:12px 20px 0;background:linear-gradient(135deg,var(--accent-dim),var(--lavender-dim));border-radius:14px;padding:14px 16px;border:1px solid rgba(232,96,122,0.15)}
+.quote-text{font-size:13px;color:var(--text);line-height:1.6;font-style:italic}
+.quote-author{font-size:11px;color:var(--muted);margin-top:4px}
+
+.tabs{display:flex;padding:0 2px;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex-shrink:0;padding:10px 12px;font-size:12px;font-weight:500;color:var(--muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.tab{flex-shrink:0;padding:10px 11px;font-size:11px;font-weight:500;color:var(--muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
 .page{display:none;padding-bottom:80px}
 .page.active{display:block}
 .section-head{font-size:10px;font-weight:500;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;padding:20px 20px 8px;display:flex;justify-content:space-between;align-items:center}
 .section-head button{font-size:11px;color:var(--accent);background:none;border:1px solid var(--accent);border-radius:8px;padding:3px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;text-transform:none;letter-spacing:0}
+
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 20px 4px}
 .stat{background:var(--surface);border-radius:14px;padding:14px 16px;border:1px solid var(--border)}
 .stat-label{font-size:11px;color:var(--muted);margin-bottom:4px}
-.stat-val{font-size:26px;font-weight:300;color:var(--text);letter-spacing:-1px}
-.stat-val span{font-size:13px;color:var(--muted);font-weight:400;letter-spacing:0}
+.stat-val{font-size:24px;font-weight:300;color:var(--text);letter-spacing:-1px}
+.stat-val span{font-size:12px;color:var(--muted);font-weight:400;letter-spacing:0}
 .prog-wrap{padding:4px 20px 0}
 .prog-bar{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;margin-bottom:5px}
 .prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s}
 .prog-label{font-size:11px;color:var(--muted)}
+
 .habit{display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s}
 .habit:active{background:var(--surface2)}
 .habit.done .habit-name{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(160,112,112,0.4)}
@@ -56,29 +65,76 @@ body{max-width:430px;margin:0 auto;min-height:100vh}
 .habit-name{font-size:14px;font-weight:400;color:var(--text);transition:color 0.2s}
 .habit-time{font-size:11px;color:var(--muted);margin-top:2px}
 .habit-edit-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;padding:4px;flex-shrink:0}
+
 .dots-wrap{padding:16px 20px 0}
 .dots-label{font-size:11px;color:var(--muted);margin-bottom:10px}
 .dots-row{display:flex;gap:7px}
-.dot{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);background:var(--surface)}
+.dot{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);background:var(--surface)}
 .dot.full{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
 .dot.partial{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
 .reset-btn{margin:20px 20px 0;padding:10px 18px;border-radius:10px;border:1px solid var(--border);font-size:13px;color:var(--muted);background:none;cursor:pointer;font-family:'DM Sans',sans-serif}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(45,31,31,0.5);z-index:100;align-items:flex-end;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:430px;max-height:85vh;overflow-y:auto}
-.modal-title{font-size:16px;font-weight:500;color:var(--text);margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
-.modal-close{background:none;border:none;cursor:pointer;font-size:22px;color:var(--muted)}
-.field{margin-bottom:14px}
-.field label{font-size:12px;font-weight:500;color:var(--text);display:block;margin-bottom:5px}
-.field input,.field select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif}
-.field input:focus,.field select:focus{outline:none;border-color:rgba(232,96,122,0.5)}
-.emoji-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-.emoji-opt{width:40px;height:40px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;background:var(--bg)}
-.emoji-opt.sel{border-color:var(--accent);background:var(--accent-dim)}
-.modal-actions{display:flex;gap:10px;margin-top:18px}
-.btn-primary{flex:1;padding:11px;border-radius:10px;background:var(--accent);border:none;font-size:14px;font-weight:500;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif}
-.btn-secondary{padding:11px 18px;border-radius:10px;background:none;border:1px solid var(--border);font-size:14px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif}
-.btn-danger{padding:11px 18px;border-radius:10px;background:none;border:1px solid rgba(232,96,122,0.3);font-size:14px;color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* STEPS */
+.steps-hero{margin:16px 20px 0;background:linear-gradient(135deg,#fff0f5,#f0eeff);border-radius:16px;border:1px solid var(--border);padding:20px;text-align:center}
+.steps-count{font-size:52px;font-weight:300;color:var(--accent);letter-spacing:-2px;line-height:1}
+.steps-label{font-size:12px;color:var(--muted);margin-top:4px}
+.steps-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px 20px 0}
+.steps-stat{background:var(--surface);border-radius:12px;padding:12px;border:1px solid var(--border);text-align:center}
+.steps-stat-val{font-size:18px;font-weight:500;color:var(--text)}
+.steps-stat-label{font-size:10px;color:var(--muted);margin-top:2px}
+.steps-prog-wrap{padding:12px 20px 0}
+.steps-goal-label{font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.steps-bar{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.steps-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--lavender));border-radius:4px;transition:width 0.4s}
+.manual-steps{padding:12px 20px 0;display:flex;gap:10px}
+.manual-steps input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif}
+.manual-steps button{padding:10px 18px;border-radius:10px;background:var(--accent);border:none;font-size:13px;font-weight:500;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* POSTS / FEED */
+.post-create{margin:16px 20px 0;background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px}
+.post-create-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.post-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.post-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:10px 16px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none}
+.post-input::placeholder{color:var(--muted);opacity:0.7}
+.post-actions{display:flex;gap:8px;margin-top:8px}
+.post-action-btn{flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:4px}
+.post-action-btn:active{background:var(--surface2)}
+.post-submit-btn{padding:8px 18px;border-radius:10px;background:var(--accent);border:none;font-size:13px;font-weight:500;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif}
+.post-preview{margin-top:10px;border-radius:10px;overflow:hidden;max-height:200px;display:none}
+.post-preview img,.post-preview video{width:100%;height:200px;object-fit:cover;border-radius:10px}
+
+.feed-post{margin:12px 20px 0;background:var(--surface);border-radius:16px;border:1px solid var(--border);overflow:hidden}
+.feed-post-header{padding:14px 16px 10px;display:flex;align-items:center;gap:10px}
+.feed-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.feed-post-info{flex:1}
+.feed-post-name{font-size:13px;font-weight:500;color:var(--text)}
+.feed-post-time{font-size:11px;color:var(--muted)}
+.feed-post-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:4px}
+.feed-post-text{padding:0 16px 12px;font-size:14px;color:var(--text);line-height:1.6}
+.feed-post-media{width:100%;max-height:300px;object-fit:cover;display:block}
+.feed-post-footer{padding:10px 16px;display:flex;gap:16px;border-top:1px solid var(--border)}
+.feed-like-btn{background:none;border:none;cursor:pointer;font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:4px}
+.feed-like-btn.liked{color:var(--accent)}
+.challenge-badge{margin:0 16px 12px;background:linear-gradient(135deg,var(--gold-dim),var(--accent-dim));border-radius:10px;padding:10px 12px;border:1px solid rgba(201,132,58,0.2)}
+.challenge-badge-text{font-size:12px;color:var(--text);font-weight:500}
+.challenge-badge-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* PROFILE */
+.profile-hero{margin:16px 20px 0;background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:20px;text-align:center}
+.profile-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent-dim),var(--lavender-dim));border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px}
+.profile-name-big{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:4px}
+.profile-bio{font-size:12px;color:var(--muted);line-height:1.5}
+.profile-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+.profile-stat{text-align:center}
+.profile-stat-val{font-size:18px;font-weight:500;color:var(--accent)}
+.profile-stat-label{font-size:10px;color:var(--muted);margin-top:2px}
+.profile-form{padding:0 20px}
+.pfield{margin-top:14px}
+.pfield label{font-size:12px;font-weight:500;color:var(--text);display:block;margin-bottom:5px}
+.pfield input,.pfield select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif}
+.pfield-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* JOURNAL */
 .mood-wrap{padding:12px 20px 0;display:flex;gap:8px;flex-wrap:wrap}
 .mood-btn{padding:7px 15px;border-radius:20px;border:1px solid var(--border);font-size:13px;color:var(--muted);background:var(--surface);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
 .mood-btn.sel{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
@@ -91,6 +147,8 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
 .save-row{padding:18px 20px 0;display:flex;align-items:center;gap:12px}
 .save-btn{padding:10px 24px;border-radius:10px;background:var(--accent);border:none;font-size:13px;font-weight:500;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif}
 .saved-msg{font-size:12px;color:var(--accent);opacity:0;transition:opacity 0.3s}
+
+/* MARKET */
 .market-hero{margin:16px 20px 0;background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px}
 .market-hero-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .market-hero-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
@@ -121,6 +179,8 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
 .note-input{flex:1;min-width:100px}
 .dir-sel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 10px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;cursor:pointer}
 .add-trade-btn{padding:8px 16px;border-radius:10px;background:var(--accent);border:none;font-size:13px;font-weight:500;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* BOOKS */
 .book-hero{margin:16px 20px 0;background:var(--lavender-dim);border-radius:16px;border:1px solid rgba(155,126,200,0.2);padding:18px}
 .book-hero-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);margin-bottom:4px}
 .book-hero-sub{font-size:12px;color:var(--muted)}
@@ -140,6 +200,8 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
 .book-summary-text{font-size:13px;color:var(--text);opacity:0.8;line-height:1.6;white-space:pre-wrap}
 .book-lesson{margin-top:8px;padding:8px 10px;background:var(--lavender-dim);border-radius:8px;border-left:2px solid var(--lavender);font-size:12px;color:var(--text);line-height:1.5}
 .book-meta{font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+
+/* HISTORY */
 .entry-card{margin:0 20px 12px;background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:16px}
 .entry-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .entry-date-str{font-size:12px;color:var(--muted)}
@@ -153,12 +215,30 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
 .entry-bar-fill{flex:1;height:3px;background:var(--surface2);border-radius:2px;overflow:hidden}
 .entry-bar-pct{height:100%;background:var(--accent);border-radius:2px}
 .empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px;line-height:1.8}
+
+/* MODALS */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(45,31,31,0.5);z-index:100;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:430px;max-height:85vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:500;color:var(--text);margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:none;border:none;cursor:pointer;font-size:22px;color:var(--muted)}
+.field{margin-bottom:14px}
+.field label{font-size:12px;font-weight:500;color:var(--text);display:block;margin-bottom:5px}
+.field input,.field select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif}
+.field input:focus,.field select:focus{outline:none;border-color:rgba(232,96,122,0.5)}
+.emoji-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.emoji-opt{width:40px;height:40px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;background:var(--bg)}
+.emoji-opt.sel{border-color:var(--accent);background:var(--accent-dim)}
+.modal-actions{display:flex;gap:10px;margin-top:18px}
+.btn-primary{flex:1;padding:11px;border-radius:10px;background:var(--accent);border:none;font-size:14px;font-weight:500;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-secondary{padding:11px 18px;border-radius:10px;background:none;border:1px solid var(--border);font-size:14px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-danger{padding:11px 18px;border-radius:10px;background:none;border:1px solid rgba(232,96,122,0.3);font-size:14px;color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <img class="topbar-logo" src="https://abhi3831-commits.github.io/my-routine/logo.png" alt="Sankalp">
+  <img class="topbar-logo" src="https://abhi3831-commits.github.io/my-routine/logo.png" alt="Sankalp" onerror="this.style.display='none'">
   <div class="topbar-right">
     <div class="topbar-greeting" id="greeting">Good morning</div>
     <div class="topbar-name" id="user-name-display">Abhijoy 👋</div>
@@ -166,14 +246,20 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
   </div>
 </div>
 
+<div id="quote-area"></div>
+
 <div class="tabs">
   <button class="tab active" onclick="showTab('tracker')">✅ Tracker</button>
+  <button class="tab" onclick="showTab('feed')">📸 Feed</button>
+  <button class="tab" onclick="showTab('steps')">👟 Steps</button>
   <button class="tab" onclick="showTab('journal')">📝 Journal</button>
   <button class="tab" onclick="showTab('market')">📈 Market</button>
   <button class="tab" onclick="showTab('books')">📚 Books</button>
+  <button class="tab" onclick="showTab('profile')">👤 Profile</button>
   <button class="tab" onclick="showTab('history')">🗂 History</button>
 </div>
 
+<!-- TRACKER -->
 <div id="page-tracker" class="page active">
   <div class="stat-grid">
     <div class="stat"><div class="stat-label">Done today</div><div class="stat-val" id="done-count">0 <span>/ 0</span></div></div>
@@ -194,6 +280,51 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
   <button class="reset-btn" onclick="resetDay()">↺ Reset today</button>
 </div>
 
+<!-- FEED -->
+<div id="page-feed" class="page">
+  <div class="post-create">
+    <div class="post-create-top">
+      <div class="post-avatar" id="feed-avatar">😊</div>
+      <input class="post-input" id="post-text" placeholder="Share your progress, workout, or challenge...">
+    </div>
+    <div id="post-preview" class="post-preview"></div>
+    <input type="file" id="media-input" accept="image/*,video/*" style="display:none" onchange="previewMedia(this)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+      <div style="display:flex;gap:8px">
+        <button class="post-action-btn" onclick="document.getElementById('media-input').click()">📷 Photo/Video</button>
+        <button class="post-action-btn" onclick="addChallenge()">🏆 Challenge</button>
+      </div>
+      <button class="post-submit-btn" onclick="submitPost()">Post</button>
+    </div>
+  </div>
+  <div class="section-head" style="margin-top:8px">Recent posts</div>
+  <div id="feed-list"></div>
+</div>
+
+<!-- STEPS -->
+<div id="page-steps" class="page">
+  <div class="steps-hero">
+    <div class="steps-count" id="steps-display">0</div>
+    <div class="steps-label">steps today</div>
+  </div>
+  <div class="steps-grid">
+    <div class="steps-stat"><div class="steps-stat-val" id="km-display">0.0</div><div class="steps-stat-label">km walked</div></div>
+    <div class="steps-stat"><div class="steps-stat-val" id="cal-display">0</div><div class="steps-stat-label">kcal burned</div></div>
+    <div class="steps-stat"><div class="steps-stat-val" id="goal-pct-display">0%</div><div class="steps-stat-label">of goal</div></div>
+  </div>
+  <div class="steps-prog-wrap">
+    <div class="steps-goal-label"><span>Daily goal</span><span id="goal-label">0 / 10,000 steps</span></div>
+    <div class="steps-bar"><div class="steps-fill" id="steps-fill" style="width:0%"></div></div>
+  </div>
+  <div class="manual-steps">
+    <input type="number" id="steps-input" placeholder="Enter steps manually">
+    <button onclick="addSteps()">+ Add</button>
+  </div>
+  <div class="section-head" style="margin-top:8px">Step history</div>
+  <div id="steps-history" style="padding:0 20px"></div>
+</div>
+
+<!-- JOURNAL -->
 <div id="page-journal" class="page">
   <div class="section-head" style="padding-top:16px">How are you feeling?</div>
   <div class="mood-wrap">
@@ -208,6 +339,7 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
   <div class="save-row"><button class="save-btn" onclick="saveJournal()">Save entry</button><span class="saved-msg" id="j-saved">✓ Saved</span></div>
 </div>
 
+<!-- MARKET -->
 <div id="page-market" class="page">
   <div class="market-hero">
     <div class="market-hero-top">
@@ -238,6 +370,7 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
   <div class="save-row"><button class="save-btn" onclick="saveMarket()">Save analysis</button><span class="saved-msg" id="m-saved">✓ Saved</span></div>
 </div>
 
+<!-- BOOKS -->
 <div id="page-books" class="page">
   <div class="book-hero">
     <div class="book-hero-title">📚 Book Summaries</div>
@@ -264,6 +397,35 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
   <div class="book-history" id="book-history"></div>
 </div>
 
+<!-- PROFILE -->
+<div id="page-profile" class="page">
+  <div class="profile-hero">
+    <div class="profile-avatar" id="profile-avatar-display">😊</div>
+    <div class="profile-name-big" id="profile-name-big">Your Name</div>
+    <div class="profile-bio" id="profile-bio-display">Set up your profile below</div>
+    <div class="profile-stats">
+      <div class="profile-stat"><div class="profile-stat-val" id="p-age-disp">-</div><div class="profile-stat-label">Age</div></div>
+      <div class="profile-stat"><div class="profile-stat-val" id="p-height-disp">-</div><div class="profile-stat-label">cm</div></div>
+      <div class="profile-stat"><div class="profile-stat-val" id="p-weight-disp">-</div><div class="profile-stat-label">kg</div></div>
+    </div>
+  </div>
+  <div class="profile-form">
+    <div class="pfield"><label>Full name</label><input id="p-name" placeholder="Your name"></div>
+    <div class="pfield"><label>Bio</label><input id="p-bio" placeholder="Trader · Fitness enthusiast · Reader"></div>
+    <div class="pfield pfield-row">
+      <div><label>Age</label><input id="p-age" type="number" placeholder="25"></div>
+      <div><label>Gender</label><select id="p-gender"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
+    </div>
+    <div class="pfield pfield-row">
+      <div><label>Height (cm)</label><input id="p-height" type="number" placeholder="175"></div>
+      <div><label>Weight (kg)</label><input id="p-weight" type="number" placeholder="70"></div>
+    </div>
+    <div class="pfield"><label>Daily step goal</label><input id="p-stepgoal" type="number" placeholder="10000"></div>
+  </div>
+  <div class="save-row"><button class="save-btn" onclick="saveProfile()">Save profile</button><span class="saved-msg" id="p-saved">✓ Saved</span></div>
+</div>
+
+<!-- HISTORY -->
 <div id="page-history" class="page">
   <div style="padding-top:6px" id="history-list"></div>
 </div>
@@ -292,13 +454,16 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
   </div>
 </div>
 
-<!-- NAME MODAL -->
+<!-- WELCOME MODAL -->
 <div class="modal-overlay" id="name-modal">
   <div class="modal">
     <div class="modal-title"><span>Welcome to Sankalp 🌿</span></div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">Your personal routine tracker. Let's start by setting up your profile.</div>
-    <div class="field"><label>What's your name?</label><input id="n-input" placeholder="Enter your name"></div>
-    <div class="modal-actions"><button class="btn-primary" onclick="saveName()">Let's go →</button></div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">Your personal routine and wellness app. Let's set up your profile!</div>
+    <div class="field"><label>Your name</label><input id="n-input" placeholder="Enter your name"></div>
+    <div class="field"><label>Age</label><input id="n-age" type="number" placeholder="25"></div>
+    <div class="field"><label>Height (cm)</label><input id="n-height" type="number" placeholder="175"></div>
+    <div class="field"><label>Weight (kg)</label><input id="n-weight" type="number" placeholder="70"></div>
+    <div class="modal-actions"><button class="btn-primary" onclick="saveWelcome()">Let's go →</button></div>
   </div>
 </div>
 
@@ -306,6 +471,18 @@ textarea::placeholder{color:var(--muted);opacity:0.5}
 const WDAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const EMOJIS=['🚶','🏃','🧘','🙏','🚿','📊','🔍','😴','🏋️','🌿','📖','☕','🥗','💊','🎯','✍️','🎵','🌅','🌙','💪','🧠','❤️','🌊','🚴','📱','💰','🎨','🌱','🏊','🤸'];
+const QUOTES=[
+  {text:"The secret of getting ahead is getting started.",author:"Mark Twain"},
+  {text:"Success is the sum of small efforts repeated day in and day out.",author:"Robert Collier"},
+  {text:"Don't watch the clock; do what it does. Keep going.",author:"Sam Levenson"},
+  {text:"Believe you can and you're halfway there.",author:"Theodore Roosevelt"},
+  {text:"Wake up with determination. Go to bed with satisfaction.",author:"Unknown"},
+  {text:"Do something today that your future self will thank you for.",author:"Sean Patrick Flanery"},
+  {text:"Don't stop when you're tired. Stop when you're done.",author:"Unknown"},
+  {text:"Kal kare so aaj kar, aaj kare so ab.",author:"Kabir"},
+  {text:"Khud ko itna strong banao ki destiny bhi tumse darti rahe.",author:"Unknown"},
+  {text:"Sangharsh karo, safal hoge.",author:"Hindi Proverb"},
+];
 const DEFAULT_HABITS=[
   {id:'walk',name:'Walk · 10k steps',time:'4:30 – 7:30 AM',icon:'🚶',color:'var(--gold-dim)'},
   {id:'prayer',name:'Prayer',time:'7:30 – 9:15 AM',icon:'🙏',color:'var(--lavender-dim)'},
@@ -318,15 +495,25 @@ const DEFAULT_HABITS=[
   {id:'ghumu',name:'Ghumu ghumu time',time:'7:00 – 8:30 PM',icon:'🌿',color:'var(--gold-dim)'},
   {id:'book',name:'Read book summary',time:'Anytime',icon:'📖',color:'var(--lavender-dim)'},
 ];
+
 function fmtDate(d){return WDAYS[d.getDay()]+', '+d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear()}
 function fmtShort(d){return d.getDate()+' '+MONTHS[d.getMonth()]}
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function flash(id){const el=document.getElementById(id);el.style.opacity='1';setTimeout(()=>el.style.opacity='0',2000)}
+
 const now=new Date();
 const hr=now.getHours();
 document.getElementById('greeting').textContent=hr<12?'Good morning ☀️':hr<17?'Good afternoon 🌤️':'Good evening 🌙';
 document.getElementById('topbar-date').innerHTML=WDAYS[now.getDay()]+', '+now.getDate()+' '+MONTHS[now.getMonth()]+'<br>'+now.getFullYear();
 const TODAY=now.toDateString();
-function getS(){try{return JSON.parse(localStorage.getItem('sankalp_v2')||'{}')}catch(e){return {}}}
-function saveS(s){try{localStorage.setItem('sankalp_v2',JSON.stringify(s))}catch(e){}}
+
+// Show daily quote
+const q=QUOTES[new Date().getDate()%QUOTES.length];
+document.getElementById('quote-area').innerHTML='<div class="quote-banner"><div class="quote-text">"'+q.text+'"</div><div class="quote-author">— '+q.author+'</div></div>';
+
+function getS(){try{return JSON.parse(localStorage.getItem('sankalp_v3')||'{}')}catch(e){return {}}}
+function saveS(s){try{localStorage.setItem('sankalp_v3',JSON.stringify(s))}catch(e){}}
+
 let S=getS();
 if(!S.days)S.days={};
 if(!S.days[TODAY])S.days[TODAY]=[];
@@ -336,33 +523,49 @@ if(!S.journal[TODAY])S.journal[TODAY]={mood:'',morning:'',evening:''};
 if(!S.market)S.market={};
 if(!S.books)S.books=[];
 if(!S.habits)S.habits=DEFAULT_HABITS;
+if(!S.posts)S.posts=[];
+if(!S.steps)S.steps={};
+if(!S.steps[TODAY])S.steps[TODAY]=0;
+if(!S.profile)S.profile={name:'',bio:'',age:'',height:'',weight:'',gender:'male',stepgoal:10000};
 if(!S.userName)S.userName='';
-let curRating=0,mNavDate=new Date(),editingHabitId=null,selectedEmoji='🚶';
+
+let curRating=0,mNavDate=new Date(),editingHabitId=null,selectedEmoji='🚶',pendingMedia=null,pendingMediaType=null;
 
 if(!S.userName){
   document.getElementById('name-modal').classList.add('open');
 }else{
   document.getElementById('user-name-display').textContent=S.userName+' 👋';
+  updateProfileDisplay();
 }
 
-function saveName(){
+function saveWelcome(){
   const n=document.getElementById('n-input').value.trim();
   if(!n)return;
-  S.userName=n;saveS(S);
+  S.userName=n;
+  S.profile.name=n;
+  S.profile.age=document.getElementById('n-age').value;
+  S.profile.height=document.getElementById('n-height').value;
+  S.profile.weight=document.getElementById('n-weight').value;
+  saveS(S);
   document.getElementById('user-name-display').textContent=n+' 👋';
   document.getElementById('name-modal').classList.remove('open');
+  updateProfileDisplay();
 }
 
 function showTab(t){
-  const names=['tracker','journal','market','books','history'];
+  const names=['tracker','feed','steps','journal','market','books','profile','history'];
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',names[i]===t));
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+t).classList.add('active');
   if(t==='history')renderHistory();
   if(t==='books')renderBooks();
   if(t==='market')loadMarket();
+  if(t==='feed')renderFeed();
+  if(t==='steps')renderStepsHistory();
+  if(t==='profile')loadProfile();
 }
 
+// TRACKER
 function renderHabits(){
   const list=document.getElementById('habit-list');list.innerHTML='';
   S.habits.forEach(h=>{
@@ -386,8 +589,7 @@ function toggleHabit(id,e){
 }
 
 function updateStats(){
-  const total=S.habits.length;
-  const done=S.days[TODAY].filter(id=>S.habits.some(h=>h.id===id)).length;
+  const total=S.habits.length,done=S.days[TODAY].filter(id=>S.habits.some(h=>h.id===id)).length;
   const pct=total?Math.round(done/total*100):0;
   document.getElementById('done-count').innerHTML=done+' <span>/ '+total+'</span>';
   document.getElementById('pct').innerHTML=pct+'<span>%</span>';
@@ -470,10 +672,135 @@ function deleteHabit(){
   saveS(S);closeModal();renderHabits();
 }
 
+// FEED - Photo/Video posting
+function previewMedia(input){
+  const file=input.files[0];if(!file)return;
+  const preview=document.getElementById('post-preview');
+  pendingMediaType=file.type.startsWith('video')?'video':'image';
+  const reader=new FileReader();
+  reader.onload=e=>{
+    pendingMedia=e.target.result;
+    preview.style.display='block';
+    if(pendingMediaType==='video'){
+      preview.innerHTML='<video src="'+pendingMedia+'" controls style="width:100%;height:200px;object-fit:cover;border-radius:10px"></video>';
+    }else{
+      preview.innerHTML='<img src="'+pendingMedia+'" style="width:100%;height:200px;object-fit:cover;border-radius:10px">';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function addChallenge(){
+  const steps=S.steps[TODAY]||0;
+  const txt=document.getElementById('post-text');
+  txt.value='I walked '+steps.toLocaleString()+' steps today! Can you beat that? 🏆 #SankalpChallenge';
+}
+
+function submitPost(){
+  const text=document.getElementById('post-text').value.trim();
+  if(!text&&!pendingMedia)return;
+  const post={
+    id:Date.now(),
+    name:S.profile.name||S.userName||'You',
+    text,
+    media:pendingMedia,
+    mediaType:pendingMediaType,
+    time:new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit'}),
+    date:TODAY,
+    likes:0,
+    liked:false,
+    isChallenge:text.includes('#SankalpChallenge')||text.includes('Can you')
+  };
+  S.posts.unshift(post);saveS(S);
+  document.getElementById('post-text').value='';
+  document.getElementById('post-preview').style.display='none';
+  pendingMedia=null;pendingMediaType=null;
+  document.getElementById('media-input').value='';
+  renderFeed();
+}
+
+function renderFeed(){
+  const list=document.getElementById('feed-list');
+  const avatar=S.profile.name?S.profile.name.charAt(0).toUpperCase():'😊';
+  document.getElementById('feed-avatar').textContent=avatar;
+  if(!S.posts||!S.posts.length){
+    list.innerHTML='<div class="empty">No posts yet.<br>Share your first workout! 💪</div>';return;
+  }
+  list.innerHTML='';
+  S.posts.forEach(p=>{
+    const card=document.createElement('div');card.className='feed-post';
+    const avatarChar=p.name?p.name.charAt(0).toUpperCase():'😊';
+    card.innerHTML='<div class="feed-post-header">'
+      +'<div class="feed-avatar">'+avatarChar+'</div>'
+      +'<div class="feed-post-info"><div class="feed-post-name">'+esc(p.name)+'</div><div class="feed-post-time">'+p.time+' · '+p.date+'</div></div>'
+      +'<button class="feed-post-del" onclick="deletePost('+p.id+')">✕</button>'
+      +'</div>'
+      +(p.isChallenge?'<div class="challenge-badge"><div class="challenge-badge-text">🏆 Challenge posted!</div><div class="challenge-badge-sub">Can your friends beat this?</div></div>':'')
+      +(p.text?'<div class="feed-post-text">'+esc(p.text)+'</div>':'')
+      +(p.media?(p.mediaType==='video'?'<video class="feed-post-media" src="'+p.media+'" controls></video>':'<img class="feed-post-media" src="'+p.media+'">'):'')
+      +'<div class="feed-post-footer">'
+      +'<button class="feed-like-btn'+(p.liked?' liked':'')+'" onclick="likePost('+p.id+')">'+(p.liked?'❤️':'🤍')+' '+p.likes+'</button>'
+      +'</div>';
+    list.appendChild(card);
+  });
+}
+
+function likePost(id){
+  const p=S.posts.find(x=>x.id===id);if(!p)return;
+  p.liked=!p.liked;p.likes+=p.liked?1:-1;
+  saveS(S);renderFeed();
+}
+
+function deletePost(id){
+  S.posts=S.posts.filter(p=>p.id!==id);saveS(S);renderFeed();
+}
+
+// STEPS
+function updateStepsDisplay(){
+  const steps=S.steps[TODAY]||0;
+  const goal=S.profile.stepgoal||10000;
+  const weight=parseFloat(S.profile.weight)||70;
+  const km=(steps*0.762/1000).toFixed(1);
+  const cal=Math.round(steps*0.04*weight/70);
+  const pct=Math.min(100,Math.round(steps/goal*100));
+  document.getElementById('steps-display').textContent=steps.toLocaleString();
+  document.getElementById('km-display').textContent=km;
+  document.getElementById('cal-display').textContent=cal;
+  document.getElementById('goal-pct-display').textContent=pct+'%';
+  document.getElementById('goal-label').textContent=steps.toLocaleString()+' / '+goal.toLocaleString()+' steps';
+  document.getElementById('steps-fill').style.width=pct+'%';
+}
+
+function addSteps(){
+  const v=parseInt(document.getElementById('steps-input').value);
+  if(!v||v<0)return;
+  S.steps[TODAY]=(S.steps[TODAY]||0)+v;
+  saveS(S);document.getElementById('steps-input').value='';
+  updateStepsDisplay();renderStepsHistory();
+}
+
+function renderStepsHistory(){
+  updateStepsDisplay();
+  const cont=document.getElementById('steps-history');cont.innerHTML='';
+  const keys=Object.keys(S.steps).sort((a,b)=>new Date(b)-new Date(a)).slice(0,7);
+  keys.forEach(k=>{
+    const s=S.steps[k];const goal=S.profile.stepgoal||10000;
+    const pct=Math.min(100,Math.round(s/goal*100));
+    const d=new Date(k);
+    const row=document.createElement('div');
+    row.style.cssText='padding:10px 0;border-bottom:1px solid var(--border)';
+    row.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px;color:var(--text)">'+WDAYS[d.getDay()]+', '+d.getDate()+' '+MONTHS[d.getMonth()]+'</span><span style="font-size:13px;font-weight:500;color:var(--accent)">'+s.toLocaleString()+'</span></div>'
+      +'<div style="height:4px;background:var(--surface2);border-radius:2px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--accent);border-radius:2px"></div></div>';
+    cont.appendChild(row);
+  });
+  if(!keys.length)cont.innerHTML='<div style="padding:20px 0;font-size:13px;color:var(--muted)">No step data yet. Add your first steps!</div>';
+}
+
+// JOURNAL
 function selMood(btn){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');S.journal[TODAY].mood=btn.dataset.mood;saveS(S);}
 function saveJournal(){S.journal[TODAY].morning=document.getElementById('j-morning').value;S.journal[TODAY].evening=document.getElementById('j-evening').value;saveS(S);flash('j-saved');}
-function flash(id){const el=document.getElementById(id);el.style.opacity='1';setTimeout(()=>el.style.opacity='0',2000);}
 
+// MARKET
 function loadMarket(){
   const k=mNavDate.toDateString();document.getElementById('m-nav-date').textContent=fmtShort(mNavDate);
   const m=S.market[k]||{};
@@ -486,7 +813,8 @@ function mNav(dir){mNavDate.setDate(mNavDate.getDate()+dir);loadMarket();}
 function colorPnl(el){const v=parseFloat(el.value);el.className='pnl-input'+(v>0?' profit':v<0?' loss':'');}
 function getMarketData(){const k=mNavDate.toDateString();if(!S.market[k])S.market[k]={trades:[]};return S.market[k];}
 function saveMarket(){
-  const m=getMarketData();m.pnl=document.getElementById('m-pnl').value;m.capital=document.getElementById('m-capital').value;
+  const m=getMarketData();
+  m.pnl=document.getElementById('m-pnl').value;m.capital=document.getElementById('m-capital').value;
   m.worked=document.getElementById('m-worked').value;m.wrong=document.getElementById('m-wrong').value;
   m.obs=document.getElementById('m-obs').value;m.plan=document.getElementById('m-plan').value;
   saveS(S);flash('m-saved');
@@ -508,6 +836,8 @@ function renderTrades(trades){
   });
 }
 function delTrade(i){const m=getMarketData();m.trades.splice(i,1);saveS(S);renderTrades(m.trades);}
+
+// BOOKS
 function setRating(r){curRating=r;document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('on',i<r));}
 function saveBook(){
   const title=document.getElementById('b-title').value.trim();if(!title)return;
@@ -518,7 +848,7 @@ function saveBook(){
 }
 function renderBooks(){
   const cont=document.getElementById('book-history');
-  if(!S.books||!S.books.length){cont.innerHTML='<div class="empty">No summaries yet.<br>Add your first one above!</div>';updateBookStreak();return;}
+  if(!S.books||!S.books.length){cont.innerHTML='<div class="empty">No summaries yet.</div>';updateBookStreak();return;}
   cont.innerHTML='';
   S.books.forEach(b=>{
     const stars='★'.repeat(b.rating||0)+'☆'.repeat(5-(b.rating||0));
@@ -534,6 +864,43 @@ function updateBookStreak(){
   for(let i=0;i<365;i++){const k=d.toDateString(),has=S.books&&S.books.some(b=>b.date===k);if(has){s++;d.setDate(d.getDate()-1);}else if(k===TODAY)break;else break;}
   document.getElementById('book-streak-badge').textContent=s+' day streak 🔥';
 }
+
+// PROFILE
+function loadProfile(){
+  const p=S.profile;
+  document.getElementById('p-name').value=p.name||'';
+  document.getElementById('p-bio').value=p.bio||'';
+  document.getElementById('p-age').value=p.age||'';
+  document.getElementById('p-height').value=p.height||'';
+  document.getElementById('p-weight').value=p.weight||'';
+  document.getElementById('p-stepgoal').value=p.stepgoal||10000;
+  if(p.gender)document.getElementById('p-gender').value=p.gender;
+}
+function saveProfile(){
+  S.profile.name=document.getElementById('p-name').value.trim();
+  S.profile.bio=document.getElementById('p-bio').value.trim();
+  S.profile.age=document.getElementById('p-age').value;
+  S.profile.height=document.getElementById('p-height').value;
+  S.profile.weight=document.getElementById('p-weight').value;
+  S.profile.gender=document.getElementById('p-gender').value;
+  S.profile.stepgoal=parseInt(document.getElementById('p-stepgoal').value)||10000;
+  if(S.profile.name){S.userName=S.profile.name;document.getElementById('user-name-display').textContent=S.profile.name+' 👋';}
+  saveS(S);updateProfileDisplay();flash('p-saved');
+}
+function updateProfileDisplay(){
+  const p=S.profile;
+  if(p.name)document.getElementById('profile-name-big').textContent=p.name;
+  if(p.bio)document.getElementById('profile-bio-display').textContent=p.bio;
+  if(p.age)document.getElementById('p-age-disp').textContent=p.age;
+  if(p.height)document.getElementById('p-height-disp').textContent=p.height;
+  if(p.weight)document.getElementById('p-weight-disp').textContent=p.weight;
+  if(p.name){
+    const initial=p.name.charAt(0).toUpperCase();
+    document.getElementById('profile-avatar-display').textContent=initial;
+  }
+}
+
+// HISTORY
 function renderHistory(){
   const list=document.getElementById('history-list');
   const keys=Object.keys(S.journal).sort((a,b)=>new Date(b)-new Date(a));
@@ -542,20 +909,28 @@ function renderHistory(){
   list.innerHTML='';
   valid.forEach(k=>{
     const j=S.journal[k],total=S.habits.length,done=(S.days[k]||[]).filter(id=>S.habits.some(h=>h.id===id)).length,pct=total?Math.round(done/total*100):0,m=S.market[k];
+    const steps=S.steps[k]||0;
     const card=document.createElement('div');card.className='entry-card';
-    card.innerHTML='<div class="entry-header"><div class="entry-date-str">'+fmtDate(new Date(k))+'</div><div class="entry-right">'+(j.mood?'<span class="mood-pill">'+j.mood+'</span>':'')+'<button class="del-btn" onclick="delEntry(\''+k+'\')">✕</button></div></div>'+(j.morning?'<div class="entry-section"><div class="entry-section-label">🌅 Morning</div><div class="entry-text">'+esc(j.morning)+'</div></div>':'')+(j.evening?'<div class="entry-section"><div class="entry-section-label">🌙 Evening</div><div class="entry-text">'+esc(j.evening)+'</div></div>':'')+(m&&m.pnl?'<div class="entry-section"><div class="entry-section-label">📈 P&L</div><div class="entry-text" style="color:'+(parseFloat(m.pnl)>=0?'var(--green)':'var(--accent)')+'">₹'+m.pnl+'</div></div>':'')+'<div class="entry-bar"><span>'+done+'/'+total+'</span><div class="entry-bar-fill"><div class="entry-bar-pct" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div>';
+    card.innerHTML='<div class="entry-header"><div class="entry-date-str">'+fmtDate(new Date(k))+'</div><div class="entry-right">'+(j.mood?'<span class="mood-pill">'+j.mood+'</span>':'')+'<button class="del-btn" onclick="delEntry(\''+k+'\')">✕</button></div></div>'
+      +(j.morning?'<div class="entry-section"><div class="entry-section-label">🌅 Morning</div><div class="entry-text">'+esc(j.morning)+'</div></div>':'')
+      +(j.evening?'<div class="entry-section"><div class="entry-section-label">🌙 Evening</div><div class="entry-text">'+esc(j.evening)+'</div></div>':'')
+      +(m&&m.pnl?'<div class="entry-section"><div class="entry-section-label">📈 P&L</div><div class="entry-text" style="color:'+(parseFloat(m.pnl)>=0?'var(--green)':'var(--accent)')+'">₹'+m.pnl+'</div></div>':'')
+      +(steps?'<div class="entry-section"><div class="entry-section-label">👟 Steps</div><div class="entry-text">'+steps.toLocaleString()+' steps</div></div>':'')
+      +'<div class="entry-bar"><span>'+done+'/'+total+'</span><div class="entry-bar-fill"><div class="entry-bar-pct" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div>';
     list.appendChild(card);
   });
 }
 function delEntry(k){if(S.journal[k])delete S.journal[k];saveS(S);renderHistory();}
-function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
+// INIT
 const tj=S.journal[TODAY];
 document.getElementById('j-morning').value=tj.morning||'';
 document.getElementById('j-evening').value=tj.evening||'';
 if(tj.mood)document.querySelectorAll('.mood-btn').forEach(b=>{if(b.dataset.mood===tj.mood)b.classList.add('sel');});
 loadMarket();
 renderHabits();
+updateStepsDisplay();
+updateProfileDisplay();
 </script>
 </body>
 </html>
