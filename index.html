@@ -1,15 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Sankalp</title>
+
+<style>
+
+:root{
+  --bg:#fdf6f0;
+  --surface:#fff8f4;
+  --surface2:#fceee6;
+  --text:#2d1f1f;
+  --muted:#9b6f6f;
+  --primary:#e8607a;
+  --secondary:#8e73c4;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Inter,sans-serif;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+}
+
+.app{
+  max-width:430px;
+  margin:auto;
+  min-height:100vh;
+  background:var(--surface);
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px;
+  position:sticky;
+  top:0;
+  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(12px);
+  z-index:100;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:800;
+}
+
+.icon-btn{
+  border:none;
+  background:var(--surface2);
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  cursor:pointer;
+}
+
+.feed{
+  padding-bottom:90px;
+}
+
+.composer{
+  display:flex;
+  gap:10px;
+  padding:14px;
+}
+
+.composer input{
+  flex:1;
+  border:none;
+  background:var(--surface2);
+  border-radius:14px;
+  padding:12px;
+}
+
+.primary{
+  border:none;
+  background:linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary)
+  );
+  color:white;
+  padding:12px 18px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.stories-wrap{
+  overflow-x:auto;
+  padding:10px 0;
+}
+
+.stories{
+  display:flex;
+  gap:14px;
+  padding:0 14px;
+}
+
+.story{
+  text-align:center;
+  font-size:12px;
+  min-width:70px;
+}
+
+.ring{
+  width:68px;
+  height:68px;
+  border-radius:50%;
+  padding:3px;
+  background:linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary)
+  );
+  margin-bottom:6px;
+}
+
+.avatar{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:white;
+  display:grid;
+  place-items:center;
+  font-size:28px;
+}
+
+.post{
+  background:white;
+  border-radius:20px;
+  margin:14px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.06);
+  animation:fadeUp .4s ease;
+}
+
+.post-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px;
+}
+
+.post-avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--surface2);
+  font-size:24px;
+}
+
+.post-name{
+  font-weight:700;
+}
+
+.post-meta{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.media{
+  width:100%;
+  height:320px;
+  object-fit:cover;
+}
+
+.post-actions{
+  display:flex;
+  gap:12px;
+  padding:12px;
+}
+
+.post-actions button{
+  border:none;
+  background:none;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.push{
+  margin-left:auto;
+}
+
+.likes{
+  padding:0 14px;
+  font-weight:700;
+}
+
+.caption{
+  padding:10px 14px;
+}
+
+.time{
+  padding:0 14px 14px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  max-width:430px;
+  display:flex;
+  justify-content:space-around;
+  background:white;
+  padding:12px;
+  border-top:1px solid #eee;
+}
+
+.bottom-nav button{
+  border:none;
+  background:none;
+  font-size:24px;
+  cursor:pointer;
+}
+
+@keyframes fadeUp{
+
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="topbar">
+
+    <div class="logo">
+      Sankalp ✨
+    </div>
+
+    <button 
+      class="icon-btn"
+      onclick="toggleTheme()"
+    >
+      🌙
+    </button>
+
+  </div>
+
+  <div class="feed" id="feed"></div>
+
+  <div class="bottom-nav">
+
+    <button>🏠</button>
+    <button>🎥</button>
+    <button>💬</button>
+    <button>📖</button>
+    <button>👤</button>
+
+  </div>
+
+</div>
+
+<script>
+
+const feed = document.getElementById("feed");
+
+let dark = false;
+
+const DEMO_STORIES = [
+  ["Arjun","🔥"],
+  ["Priya","🌸"],
+  ["Sneha","📖"],
+  ["Rohit","🏃"],
+  ["Anaya","🧘"]
+];
+
+const posts = [
+
+  {
+    id:1,
+    avatar:"🔥",
+    name:"Arjun",
+    username:"@arjun",
+    caption:"Discipline beats motivation every single day.",
+    likes:482,
+    liked:false
+  },
+
+  {
+    id:2,
+    avatar:"🌸",
+    name:"Priya",
+    username:"@priya",
+    caption:"Morning yoga + journaling done ✨",
+    likes:294,
+    liked:false
+  },
+
+  {
+    id:3,
+    avatar:"📖",
+    name:"Sneha",
+    username:"@sneha",
+    caption:"Finished Deep Work today 📚",
+    likes:167,
+    liked:false
+  }
+
+];
+
 function renderFeed(){
 
   feed.innerHTML = `
   
   <div class="composer">
 
-    <div class="mini-avatar">
-      ${S.profile.avatar}
-    </div>
-
     <input 
-      id="quick" 
+      id="quick"
       placeholder="Share your progress..."
     >
 
@@ -23,26 +346,19 @@ function renderFeed(){
   </div>
 
   <div class="stories-wrap">
+
     <div class="stories">
 
-      <div class="story">
-        <div 
-          class="ring add"
-          onclick="openUpload('story')"
-        >
-          <div class="avatar">+</div>
-        </div>
-        Your Story
-      </div>
-
       ${DEMO_STORIES.map(s => `
-      
+
         <div class="story">
 
           <div class="ring">
+
             <div class="avatar">
               ${s[1]}
             </div>
+
           </div>
 
           ${s[0]}
@@ -52,81 +368,16 @@ function renderFeed(){
       `).join("")}
 
     </div>
+
   </div>
 
   `;
 
-  let posts = [
-    
-    {
-      id: 1,
-      avatar: "🔥",
-      name: "Arjun",
-      username: "@arjun",
-      caption: "Discipline beats motivation every single day.",
-      likes: 482,
-      ts: Date.now() - 1000000,
-      liked: false
-    },
-
-    {
-      id: 2,
-      avatar: "🌸",
-      name: "Priya",
-      username: "@priya",
-      caption: "Morning yoga + journaling done ✨",
-      likes: 294,
-      ts: Date.now() - 500000,
-      liked: false
-    },
-
-    {
-      id: 3,
-      avatar: "📖",
-      name: "Sneha",
-      username: "@sneha",
-      caption: "Finished Deep Work today. Amazing book.",
-      likes: 167,
-      ts: Date.now() - 200000,
-      liked: false
-    }
-
-  ];
-
-  let userPosts = S.posts.filter(
-    p => p.type !== "reel" && p.type !== "story"
-  );
-
-  posts = [...userPosts, ...posts];
-
-  if(!posts.length){
-
-    feed.innerHTML += `
-      <div class="empty">
-        <b>No posts yet.</b>
-        Share your first workout!
-      </div>
-    `;
-
-    return;
-  }
-
   posts.forEach(p => {
 
-    feed.insertAdjacentHTML(
-      "beforeend",
+    feed.innerHTML += `
 
-      `
-      <article 
-        class="post"
-        style="
-          animation:fadeUp .4s ease;
-          border-radius:18px;
-          overflow:hidden;
-          margin:14px;
-          box-shadow:0 10px 30px rgba(0,0,0,.06)
-        "
-      >
+      <article class="post">
 
         <div class="post-head">
 
@@ -146,63 +397,28 @@ function renderFeed(){
 
           </div>
 
-          <button 
-            class="post-more"
-            onclick="deletePost(${p.id})"
-          >
-            •••
-          </button>
-
         </div>
 
-        ${
-          p.media
-          ?
-          (
-            p.mediaType === "video"
-            ?
-            `
-            <video 
-              class="media" 
-              src="${p.media}" 
-              controls 
-              playsinline
-            ></video>
-            `
-            :
-            `
-            <img 
-              class="media" 
-              src="${p.media}"
-            >
-            `
-          )
-          :
-          `
-          <div 
-            style="
-              height:240px;
-              display:grid;
-              place-items:center;
-              background:
-              linear-gradient(
-                135deg,
-                rgba(232,96,122,.15),
-                rgba(142,115,196,.15)
-              );
-              font-size:72px
-            "
-          >
-            ${p.avatar}
-          </div>
-          `
-        }
+        <div 
+          style="
+            height:320px;
+            background:
+            linear-gradient(
+              135deg,
+              rgba(232,96,122,.15),
+              rgba(142,115,196,.15)
+            );
+            display:grid;
+            place-items:center;
+            font-size:72px
+          "
+        >
+          ${p.avatar}
+        </div>
 
         <div class="post-actions">
 
-          <button 
-            onclick="likePost(${p.id})"
-          >
+          <button onclick="likePost(${p.id})">
             ${p.liked ? "❤️" : "🤍"}
           </button>
 
@@ -217,7 +433,7 @@ function renderFeed(){
         </div>
 
         <div class="likes">
-          ${p.likes || 0} likes
+          ${p.likes} likes
         </div>
 
         <div class="caption">
@@ -225,18 +441,105 @@ function renderFeed(){
           ${p.caption}
         </div>
 
-        <div class="comments">
-          View all comments
-        </div>
-
         <div class="time">
-          ${ago(p.ts)} ago
+          2 hours ago
         </div>
 
       </article>
-      `
-    );
+
+    `;
 
   });
 
 }
+
+function likePost(id){
+
+  const post = posts.find(
+    p => p.id === id
+  );
+
+  post.liked = !post.liked;
+
+  if(post.liked){
+    post.likes++;
+  }else{
+    post.likes--;
+  }
+
+  renderFeed();
+
+}
+
+function quickPost(){
+
+  const input = document.getElementById("quick");
+
+  if(!input.value) return;
+
+  posts.unshift({
+
+    id:Date.now(),
+
+    avatar:"🚀",
+
+    name:"You",
+
+    username:"@you",
+
+    caption:input.value,
+
+    likes:0,
+
+    liked:false
+
+  });
+
+  input.value = "";
+
+  renderFeed();
+
+}
+
+function toggleTheme(){
+
+  dark = !dark;
+
+  if(dark){
+
+    document.documentElement.style
+    .setProperty("--bg","#111");
+
+    document.documentElement.style
+    .setProperty("--surface","#1a1a1a");
+
+    document.documentElement.style
+    .setProperty("--surface2","#222");
+
+    document.documentElement.style
+    .setProperty("--text","#fff");
+
+  }else{
+
+    document.documentElement.style
+    .setProperty("--bg","#fdf6f0");
+
+    document.documentElement.style
+    .setProperty("--surface","#fff8f4");
+
+    document.documentElement.style
+    .setProperty("--surface2","#fceee6");
+
+    document.documentElement.style
+    .setProperty("--text","#2d1f1f");
+
+  }
+
+}
+
+renderFeed();
+
+</script>
+
+</body>
+</html>
