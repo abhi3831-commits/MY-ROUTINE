@@ -1,182 +1,242 @@
-/* =========================
-   SAN KALP PREMIUM FEATURES
-========================= */
+function renderFeed(){
 
-// NOTIFICATIONS SYSTEM
-S.notifications ??= [
-  {
-    id: 1,
-    text: "🔥 Rahul completed 10k steps challenge",
-    time: "2m ago"
-  },
-  {
-    id: 2,
-    text: "🌸 Priya started following you",
-    time: "10m ago"
-  }
-];
+  feed.innerHTML = `
+  
+  <div class="composer">
 
-function renderNotifications(){
-  let html = `
-    <div class="dash-list" style="margin-top:12px">
-      <div class="dash-list-title">
-        <span>Notifications</span>
-      </div>
-      ${
-        S.notifications.map(n => `
-          <div class="dash-item">
-            <div class="dash-item-icon">🔔</div>
-            <div class="dash-item-main">
-              <b>${n.text}</b>
-              <span>${n.time}</span>
-            </div>
-          </div>
-        `).join("")
-      }
+    <div class="mini-avatar">
+      ${S.profile.avatar}
     </div>
-  `;
 
-  document.querySelector("#screen-dashboard .scroll")
-    .insertAdjacentHTML("beforeend", html);
-}
+    <input 
+      id="quick" 
+      placeholder="Share your progress..."
+    >
 
-// CHALLENGE SYSTEM
-S.challenges ??= [
-  {
-    title: "10k Steps Daily",
-    people: 238,
-    emoji: "🚶"
-  },
-  {
-    title: "7 Days Meditation",
-    people: 124,
-    emoji: "🧘"
-  }
-];
+    <button 
+      class="primary"
+      onclick="quickPost()"
+    >
+      Post
+    </button>
 
-function renderChallenges(){
-  let html = `
-    <div class="dash-list">
-      <div class="dash-list-title">
-        <span>Trending Challenges</span>
+  </div>
+
+  <div class="stories-wrap">
+    <div class="stories">
+
+      <div class="story">
+        <div 
+          class="ring add"
+          onclick="openUpload('story')"
+        >
+          <div class="avatar">+</div>
+        </div>
+        Your Story
       </div>
 
-      ${
-        S.challenges.map(c => `
-          <div class="dash-item">
-            <div class="dash-item-icon">${c.emoji}</div>
-            <div class="dash-item-main">
-              <b>${c.title}</b>
-              <span>${c.people} people joined</span>
-            </div>
+      ${DEMO_STORIES.map(s => `
+      
+        <div class="story">
 
-            <button class="primary">
-              Join
-            </button>
+          <div class="ring">
+            <div class="avatar">
+              ${s[1]}
+            </div>
           </div>
-        `).join("")
-      }
+
+          ${s[0]}
+
+        </div>
+
+      `).join("")}
+
     </div>
+  </div>
+
   `;
 
-  document.querySelector("#screen-dashboard .scroll")
-    .insertAdjacentHTML("beforeend", html);
-}
+  let posts = [
+    
+    {
+      id: 1,
+      avatar: "🔥",
+      name: "Arjun",
+      username: "@arjun",
+      caption: "Discipline beats motivation every single day.",
+      likes: 482,
+      ts: Date.now() - 1000000,
+      liked: false
+    },
 
-// THEME TOGGLE
-let dark = false;
+    {
+      id: 2,
+      avatar: "🌸",
+      name: "Priya",
+      username: "@priya",
+      caption: "Morning yoga + journaling done ✨",
+      likes: 294,
+      ts: Date.now() - 500000,
+      liked: false
+    },
 
-function toggleTheme(){
+    {
+      id: 3,
+      avatar: "📖",
+      name: "Sneha",
+      username: "@sneha",
+      caption: "Finished Deep Work today. Amazing book.",
+      likes: 167,
+      ts: Date.now() - 200000,
+      liked: false
+    }
 
-  dark = !dark;
+  ];
 
-  if(dark){
+  let userPosts = S.posts.filter(
+    p => p.type !== "reel" && p.type !== "story"
+  );
 
-    document.documentElement.style.setProperty("--bg","#111");
-    document.documentElement.style.setProperty("--surface","#1a1a1a");
-    document.documentElement.style.setProperty("--surface2","#222");
-    document.documentElement.style.setProperty("--text","#fff");
-    document.documentElement.style.setProperty("--muted","#aaa");
+  posts = [...userPosts, ...posts];
 
-  } else {
+  if(!posts.length){
 
-    document.documentElement.style.setProperty("--bg","#fdf6f0");
-    document.documentElement.style.setProperty("--surface","#fff8f4");
-    document.documentElement.style.setProperty("--surface2","#fceee6");
-    document.documentElement.style.setProperty("--text","#2d1f1f");
-    document.documentElement.style.setProperty("--muted","#9b6f6f");
+    feed.innerHTML += `
+      <div class="empty">
+        <b>No posts yet.</b>
+        Share your first workout!
+      </div>
+    `;
+
+    return;
   }
-}
 
-// ADD BUTTON TO TOPBAR
-document.querySelectorAll(".topbar").forEach(bar => {
+  posts.forEach(p => {
 
-  let btn = document.createElement("button");
+    feed.insertAdjacentHTML(
+      "beforeend",
 
-  btn.className = "icon-btn";
+      `
+      <article 
+        class="post"
+        style="
+          animation:fadeUp .4s ease;
+          border-radius:18px;
+          overflow:hidden;
+          margin:14px;
+          box-shadow:0 10px 30px rgba(0,0,0,.06)
+        "
+      >
 
-  btn.innerHTML = "🌙";
+        <div class="post-head">
 
-  btn.onclick = toggleTheme;
+          <div class="post-avatar">
+            ${p.avatar}
+          </div>
 
-  bar.appendChild(btn);
-});
+          <div>
 
-// REALISTIC SOCIAL POSTS
-const extraPosts = [
-  {
-    caption: "Finished morning run. Discipline > motivation.",
-    avatar: "🏃",
-    name: "Arjun",
-    username: "@arjun",
-    likes: 482
-  },
-  {
-    caption: "Read 30 pages today 📖",
-    avatar: "📚",
-    name: "Sneha",
-    username: "@sneha",
-    likes: 217
-  }
-];
+            <div class="post-name">
+              ${p.name}
+            </div>
 
-extraPosts.forEach(p => {
-  S.posts.push({
-    id: Date.now() + Math.random(),
-    ts: Date.now(),
-    type: "post",
-    media: null,
-    mediaType: null,
-    liked: false,
-    ...p
+            <div class="post-meta">
+              ${p.username}
+            </div>
+
+          </div>
+
+          <button 
+            class="post-more"
+            onclick="deletePost(${p.id})"
+          >
+            •••
+          </button>
+
+        </div>
+
+        ${
+          p.media
+          ?
+          (
+            p.mediaType === "video"
+            ?
+            `
+            <video 
+              class="media" 
+              src="${p.media}" 
+              controls 
+              playsinline
+            ></video>
+            `
+            :
+            `
+            <img 
+              class="media" 
+              src="${p.media}"
+            >
+            `
+          )
+          :
+          `
+          <div 
+            style="
+              height:240px;
+              display:grid;
+              place-items:center;
+              background:
+              linear-gradient(
+                135deg,
+                rgba(232,96,122,.15),
+                rgba(142,115,196,.15)
+              );
+              font-size:72px
+            "
+          >
+            ${p.avatar}
+          </div>
+          `
+        }
+
+        <div class="post-actions">
+
+          <button 
+            onclick="likePost(${p.id})"
+          >
+            ${p.liked ? "❤️" : "🤍"}
+          </button>
+
+          <button>💬</button>
+
+          <button>📤</button>
+
+          <button class="push">
+            🔖
+          </button>
+
+        </div>
+
+        <div class="likes">
+          ${p.likes || 0} likes
+        </div>
+
+        <div class="caption">
+          <b>${p.username}</b>
+          ${p.caption}
+        </div>
+
+        <div class="comments">
+          View all comments
+        </div>
+
+        <div class="time">
+          ${ago(p.ts)} ago
+        </div>
+
+      </article>
+      `
+    );
+
   });
-});
 
-// APP OPEN ANIMATION
-document.body.animate(
-  [
-    { opacity: 0, transform: "scale(.98)" },
-    { opacity: 1, transform: "scale(1)" }
-  ],
-  {
-    duration: 600,
-    easing: "ease-out"
-  }
-);
-
-// PREMIUM PROFILE VERIFIED BADGE
-function addVerifiedBadge(){
-
-  let username = document.getElementById("top-username");
-
-  if(username && !username.innerHTML.includes("✔️")){
-
-    username.innerHTML += " ✔️";
-  }
 }
-
-renderNotifications();
-renderChallenges();
-addVerifiedBadge();
-
-save();
